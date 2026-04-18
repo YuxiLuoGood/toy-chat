@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scan Your Toy — Brighten</title>
+
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/ar.css" />
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <!-- Mind AR: image recognition library, built on top of A-Frame -->
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+
+  <!-- 
+       TOP BAR
+       Floats above the camera view. Contains navigation links
+       and the Brighten logo.
+  -->
+  <div id="top-bar">
+    <a href="home.html">← Home</a>
+    <img src="../assets/Brighten-logo.png" alt="Brighten" class="logo-img" />
+    <a href="careers.html">Careers</a>
+  </div>
+
+  <!-- Scanning hint shown before any toy is detected.
+       Fades out automatically once a target is found. -->
+  <div id="hint">📷 Point at your toy to scan</div>
+
+  <!-- AR SCENE -->
+  <div id="ar-container">
+    <a-scene
+      mindar-image="imageTargetSrc: ../assets/targets.mind;"
+      embedded
+      vr-mode-ui="enabled: false"
+      renderer="colorManagement: true"
+    >
+      <!-- Programmer (targetIndex: 0) -->
+      <a-entity mindar-image-target="targetIndex: 0" id="ar-target-0">
+        <a-image src="../assets/characters/char-programmer.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- Police Officer (targetIndex: 1) -->
+      <a-entity mindar-image-target="targetIndex: 1" id="ar-target-1">
+        <a-image src="../assets/characters/char-police.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- Teacher (targetIndex: 2) -->
+      <a-entity mindar-image-target="targetIndex: 2" id="ar-target-2">
+        <a-image src="../assets/characters/char-teacher.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- Farmer (targetIndex: 3) -->
+      <a-entity mindar-image-target="targetIndex: 3" id="ar-target-3">
+        <a-image src="../assets/characters/char-farmer.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- Doctor (targetIndex: 4) -->
+      <a-entity mindar-image-target="targetIndex: 4" id="ar-target-4">
+        <a-image src="../assets/characters/char-doctor.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- Astronaut (targetIndex: 5) -->
+      <a-entity mindar-image-target="targetIndex: 5" id="ar-target-5">
+        <a-image src="../assets/characters/char-astronaut.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- The virtual camera — represents the phone camera viewpoint -->
+      <a-camera position="0 0 0"></a-camera>
+    </a-scene>
+  </div>
+
+  <!-- CHAT UI-->
+  <div id="chat-ui" style="display:none;">
+
+    <!-- Character name shown at the top of the chat panel -->
+    <div id="chat-character-name"></div>
+
+    <!-- Scrollable message history (user + assistant bubbles) -->
+    <div id="chat-messages"></div>
+
+    <div id="chat-input-area">
+
+      <!-- Quick-tap preset question buttons populated by chat.js -->
+      <div id="chat-presets"></div>
+
+      <!-- Free-text input row -->
+      <div id="chat-input-row">
+        <input type="text" id="chat-input" placeholder="Ask me anything..." />
+        <button id="chat-send">Send</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="../js/ar.js"></script>
+  <script src="../js/chat.js"></script>
+  <script>
+    // Called by ar.js when a toy is successfully recognised.
+    // career = { id: "programmer", name: "Programmer" }
+    function onCareerFound(career) {
+      document.getElementById('hint').style.opacity = '0'; // hide scan hint
+      document.getElementById('chat-ui').style.display = 'flex'; // show chat
+      initChat(career); // hand off to teammate's chat module
+    }
+
+    // Called by ar.js when the toy leaves the camera view.
+    function onCareerLost() {
+      document.getElementById('hint').style.opacity = '1'; // show scan hint
+      document.getElementById('chat-ui').style.display = 'none'; // hide chat
+    }
+  </script>
+</body>
+</html>

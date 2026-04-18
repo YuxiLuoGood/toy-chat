@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career — Brighten</title>
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/career.css" />
+</head>
+<body>
+
+  <nav>
+    <a href="home.html" class="nav-brand">
+      <img src="../assets/Brighten-logo.png" alt="Brighten" class="logo-img" />
+      <span class="nav-tagline">For Bright<br>Futures</span>
+    </a>
+    <div class="nav-links">
+      <a href="careers.html" class="btn-back">← Careers</a>
+    </div>
+  </nav>
+
+  <div id="career-hero" class="career-hero"></div>
+  <div id="career-does" class="detail-section"></div>
+  <div id="career-facts" class="facts-section"></div>
+  <div id="career-cta" class="scan-cta"></div>
+
+  <script>
+    const CAREERS = {
+      programmer: {
+        img: '../assets/characters/char-programmer.png',
+        name: 'Programmer', tag: 'Technology',
+        intro: 'Programmers write instructions for computers to follow. They build the apps, games, and websites you use every day!',
+        does: [
+          { icon: '🖥️', title: 'Write code',        desc: 'Type special instructions that tell computers exactly what to do' },
+          { icon: '🎮', title: 'Build games & apps', desc: 'Turn ideas into real things people can use on phones and computers' },
+          { icon: '🐛', title: 'Fix bugs',            desc: 'Find and solve problems when something in the code goes wrong' },
+        ],
+        facts: [
+          '🌍 There are over 700 different programming languages in the world!',
+          '🎮 The first video game was created in 1958 — it was a simple tennis game.',
+          '🤖 Programmers are now teaching computers to think and learn on their own.',
+        ],
+      },
+      police: {
+        img: '../assets/characters/char-police.png',
+        name: 'Police Officer', tag: 'Public Safety',
+        intro: 'Police officers protect people and keep communities safe. They are always ready to help when someone is in trouble!',
+        does: [
+          { icon: '🚔', title: 'Patrol the streets', desc: 'Drive or walk around to make sure everyone is safe' },
+          { icon: '🔍', title: 'Solve cases',         desc: 'Investigate what happened and find out the truth' },
+          { icon: '🤝', title: 'Help the community',  desc: 'Assist people who are lost, hurt, or in danger' },
+        ],
+        facts: [
+          '🚨 Police sirens are designed to be heard from over 1km away!',
+          '🐕 Police dogs can smell things 100,000 times better than humans.',
+          '🌐 Police officers in different countries wear very different uniforms.',
+        ],
+      },
+      teacher: {
+        img: '../assets/characters/char-teacher.png',
+        name: 'Teacher', tag: 'Education',
+        intro: 'Teachers help children learn new things every day. They make learning fun and exciting for everyone in the classroom!',
+        does: [
+          { icon: '📝', title: 'Plan lessons',      desc: 'Prepare fun and interesting activities for students to learn' },
+          { icon: '🗣️', title: 'Explain ideas',     desc: 'Break down tricky topics so everyone can understand them' },
+          { icon: '⭐', title: 'Encourage students', desc: 'Cheer students on and help them believe in themselves' },
+        ],
+        facts: [
+          '📖 The average teacher reads over 1,000 student essays every year!',
+          '🌱 Studies show a great teacher can change a student\'s life forever.',
+          '🏫 In Finland, teachers are respected as much as doctors and lawyers.',
+        ],
+      },
+      farmer: {
+        img: '../assets/characters/char-farmer.png',
+        name: 'Farmer', tag: 'Agriculture',
+        intro: 'Farmers grow the food that feeds the whole world. Without farmers, there would be no vegetables, fruit, or rice on our plates!',
+        does: [
+          { icon: '🌱', title: 'Plant crops',      desc: 'Sow seeds in the ground and care for them as they grow' },
+          { icon: '🚜', title: 'Use big machines', desc: 'Drive tractors and harvesters to tend to large fields' },
+          { icon: '☀️', title: 'Work with nature', desc: 'Watch the weather and seasons to know when to plant and harvest' },
+        ],
+        facts: [
+          '🌍 Farmers produce enough food to feed 8 billion people on Earth!',
+          '🐄 One dairy cow can produce up to 30 litres of milk every single day.',
+          '🌾 Rice is the main food for more than half the world\'s population.',
+        ],
+      },
+      doctor: {
+        img: '../assets/characters/char-doctor.png',
+        name: 'Doctor', tag: 'Healthcare',
+        intro: 'Doctors help sick people get better and keep healthy people well. They study the human body for many years to become experts!',
+        does: [
+          { icon: '🔬', title: 'Examine patients',  desc: 'Check your body to understand what might be wrong' },
+          { icon: '💊', title: 'Prescribe medicine', desc: 'Choose the right treatment to help people feel better' },
+          { icon: '🏥', title: 'Perform operations', desc: 'Some doctors do surgery to fix problems inside the body' },
+        ],
+        facts: [
+          '🧠 The human brain has about 86 billion neurons — doctors are still studying it!',
+          '❤️ Your heart beats around 100,000 times every single day.',
+          '🩺 The stethoscope was invented in 1816 using a rolled-up piece of paper!',
+        ],
+      },
+      astroner: {
+        img: '../assets/characters/char-astronaut.png',
+        name: 'Astronaut', tag: 'Space',
+        intro: 'Astronauts travel beyond Earth to explore outer space. They live on space stations, conduct experiments, and push the limits of human discovery!',
+        does: [
+          { icon: '🛸', title: 'Travel to space',  desc: 'Launch on a rocket and orbit the Earth at 28,000 km/h' },
+          { icon: '🔭', title: 'Run experiments',  desc: 'Conduct science tests that can only be done in zero gravity' },
+          { icon: '🧑‍🚀', title: 'Do spacewalks', desc: 'Float outside the spacecraft to repair equipment' },
+        ],
+        facts: [
+          '🌌 Space is completely silent — sound cannot travel in a vacuum!',
+          '🌍 Astronauts on the ISS see 16 sunrises and sunsets every day.',
+          '🍕 Astronauts can\'t eat pizza in space — crumbs float and damage equipment!',
+        ],
+      },
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id') || 'programmer';
+    const c = CAREERS[id] || CAREERS['programmer'];
+    document.title = `${c.name} — Brighten`;
+
+    document.getElementById('career-hero').innerHTML = `
+      <img src="${c.img}" class="career-hero-img" />
+      <h1>${c.name}</h1>
+      <span class="career-tag">${c.tag}</span>
+      <p class="career-intro">${c.intro}</p>
+    `;
+
+    document.getElementById('career-does').innerHTML = `
+      <h2>What does a ${c.name} do? 🤔</h2>
+      <div class="do-list">
+        ${c.does.map(d => `
+          <div class="do-item">
+            <span class="do-icon">${d.icon}</span>
+            <div class="do-text">
+              <strong>${d.title}</strong>
+              <span>${d.desc}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    document.getElementById('career-facts').innerHTML = `
+      <h2>Did you know? 🤩</h2>
+      <div class="facts-list">
+        ${c.facts.map(f => `<div class="fact-item">${f}</div>`).join('')}
+      </div>
+    `;
+
+    document.getElementById('career-cta').innerHTML = `
+      <p>Ready to meet your ${c.name} hero? Grab your toy and scan it!</p>
+      <a href="ar.html" class="btn-scan-big">📷 Scan to Meet Me!</a>
+    `;
+  </script>
+
+</body>
+</html>
