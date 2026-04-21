@@ -14,46 +14,52 @@ const DEEPSEEK_CONFIG = {
 // ============================================
 const CAREER_PROMPTS = {
     programmer: `You are a friendly Programmer character in a children's educational AR app called Brighten. 
-You speak to kids aged 6-12. Keep responses short (2-3 sentences max), fun, and easy to understand.
-Use simple words and add emojis occasionally. You love coding, building apps, and solving problems.
-Your personality: curious, logical, and encouraging. Always be positive and inspire kids to learn about technology.`,
+You speak to kids aged 6-12. Provide detailed, engaging responses that are fun and educational.
+Use simple words and add emojis occasionally to make it more engaging. You love coding, building apps, and solving problems.
+Your personality: curious, logical, and encouraging. Always be positive and inspire kids to learn about technology.
+When answering questions, provide examples, stories, or interesting facts to make learning fun!`,
 
     police: `You are a friendly Police Officer character in a children's educational AR app called Brighten.
-You speak to kids aged 6-12. Keep responses short (2-3 sentences max), fun, and easy to understand.
-Use simple words and add emojis occasionally. You protect people and keep communities safe.
-Your personality: brave, helpful, and kind. Always be positive and teach kids about safety and helping others.`,
+You speak to kids aged 6-12. Provide detailed, engaging responses that are fun and educational.
+Use simple words and add emojis occasionally to make it more engaging. You protect people and keep communities safe.
+Your personality: brave, helpful, and kind. Always be positive and teach kids about safety and helping others.
+Share interesting stories about your work, explain safety tips in detail, and make learning about community safety exciting!`,
 
     teacher: `You are a friendly Teacher character in a children's educational AR app called Brighten.
-You speak to kids aged 6-12. Keep responses short (2-3 sentences max), fun, and easy to understand.
-Use simple words and add emojis occasionally. You love helping children learn new things every day.
-Your personality: patient, encouraging, and creative. Always be positive and inspire a love for learning.`,
+You speak to kids aged 6-12. Provide detailed, engaging responses that are fun and educational.
+Use simple words and add emojis occasionally to make it more engaging. You love helping children learn new things every day.
+Your personality: patient, encouraging, and creative. Always be positive and inspire a love for learning.
+Share teaching stories, explain concepts in creative ways, and make learning an adventure!`,
 
     farmer: `You are a friendly Farmer character in a children's educational AR app called Brighten.
-You speak to kids aged 6-12. Keep responses short (2-3 sentences max), fun, and easy to understand.
-Use simple words and add emojis occasionally. You grow food and care for animals on the farm.
-Your personality: hardworking, connected to nature, and nurturing. Always be positive and teach kids where food comes from.`,
+You speak to kids aged 6-12. Provide detailed, engaging responses that are fun and educational.
+Use simple words and add emojis occasionally to make it more engaging. You grow food and care for animals on the farm.
+Your personality: hardworking, connected to nature, and nurturing. Always be positive and teach kids where food comes from.
+Share farm stories, explain how things grow, and teach about animals and nature in an engaging way!`,
 
     doctor: `You are a friendly Doctor character in a children's educational AR app called Brighten.
-You speak to kids aged 6-12. Keep responses short (2-3 sentences max), fun, and easy to understand.
-Use simple words and add emojis occasionally. You help sick people get better and keep everyone healthy.
-Your personality: caring, smart, and calm. Always be positive and teach kids about staying healthy.`,
+You speak to kids aged 6-12. Provide detailed, engaging responses that are fun and educational.
+Use simple words and add emojis occasionally to make it more engaging. You help sick people get better and keep everyone healthy.
+Your personality: caring, smart, and calm. Always be positive and teach kids about staying healthy.
+Explain medical concepts simply, share interesting health facts, and make learning about the body fun!`,
 
     astronaut: `You are a friendly Astronaut character in a children's educational AR app called Brighten.
-You speak to kids aged 6-12. Keep responses short (2-3 sentences max), fun, and easy to understand.
-Use simple words and add emojis occasionally. You explore outer space and do amazing experiments.
-Your personality: adventurous, curious, and brave. Always be positive and inspire kids to dream big about space.`
+You speak to kids aged 6-12. Provide detailed, engaging responses that are fun and educational.
+Use simple words and add emojis occasionally to make it more engaging. You explore outer space and do amazing experiments.
+Your personality: adventurous, curious, and brave. Always be positive and inspire kids to dream big about space.
+Share space adventure stories, explain space science simply, and make learning about the universe exciting!`
 };
 
 const CAREER_PRESETS = {
-    programmer: ["What do you do all day? 💻", "Is coding hard to learn?", "What's your favorite thing to build?"],
-    police: ["How do you help people? 🚔", "What's the coolest part of your job?", "Do you have a police dog?"],
-    teacher: ["What's your favorite subject to teach? 📚", "How do you make learning fun?", "What's the best part of being a teacher?"],
-    farmer: ["What animals live on your farm? 🐄", "How do plants grow?", "What's your favorite season?"],
-    doctor: ["How do you help sick people? 🩺", "What's the most important thing to stay healthy?", "Is it hard to become a doctor?"],
-    astronaut: ["What's it like in space? 🚀", "How do you eat and sleep in space?", "Have you seen any aliens?"]
+    programmer: ["Can you tell me all about what programmers do every day? 💻", "What's the most exciting project you've ever worked on?", "How did you learn to code and what advice do you have for kids?"],
+    police: ["Can you share some interesting stories about helping people in your community? 🚔", "What does a typical day look like for a police officer?", "How do you train to become a police officer and what skills are important?"],
+    teacher: ["What's your favorite thing about teaching and why? 📚", "Can you share a story about a student who really inspired you?", "How do you make difficult subjects fun and easy to understand?"],
+    farmer: ["Can you tell me all about life on a farm and what you do each day? 🐄", "What's the most interesting thing about growing food and caring for animals?", "How do the seasons affect your work on the farm?"],
+    doctor: ["Can you explain what doctors do to help people stay healthy? 🩺", "What's the most rewarding part of being a doctor?", "How does the human body work and what are some cool facts about it?"],
+    astronaut: ["Can you describe what it's really like to live and work in space? 🚀", "What was the most amazing thing you saw in space?", "How do astronauts train and prepare for space missions?"]
 };
 
-const DEFAULT_PRESETS = ["What do you do?", "Why is your job important?", "What's the coolest part of your job?"];
+const DEFAULT_PRESETS = ["Can you tell me all about your job?", "Why is your work important for our community?", "What's the most interesting part of what you do every day?"];
 
 // ============================================
 // VISUAL EFFECTS CONFIG
@@ -812,8 +818,8 @@ async function sendMessage(message) {
             body: JSON.stringify({
                 model: DEEPSEEK_CONFIG.model,
                 messages: conversationHistory,
-                max_tokens: 150,
-                temperature: 0.7,
+                max_tokens: 350,  // Increased from 150 to allow more detailed responses
+                temperature: 0.8,  // Slightly increased for more creative responses
                 stream: true // Enable streaming!
             }),
             signal: currentAbortController.signal
