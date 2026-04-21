@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scan Your Toy — Brighten</title>
+
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/ar.css" />
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <!-- Mind AR: image recognition library, built on top of A-Frame -->
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+
+  <!-- 
+       TOP BAR
+       Floats above the camera view. Contains navigation links
+       and the Brighten logo.
+  -->
+  <div id="top-bar">
+    <a href="home.html">← Home</a>
+    <img src="../assets/Brighten-logo.png" alt="Brighten" class="logo-img" />
+    <div style="display: flex; gap: 8px;">
+      <button id="test-mode-btn" style="
+        background: var(--yellow);
+        color: var(--dark);
+        border: none;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: var(--font-body);
+        border: 1.5px solid rgba(255,255,255,0.3);
+        transition: background 0.2s;
+      ">🧪 Test</button>
+      <a href="careers.html">Careers</a>
+    </div>
+  </div>
+
+  <!-- Test mode panel (hidden by default) -->
+  <div id="test-mode-panel" style="
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 300;
+    background: rgba(255,255,255,0.97);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: none;
+    max-width: 320px;
+    border: 2px solid var(--dark);
+  ">
+    <h3 style="
+      margin-bottom: 16px; 
+      font-family: var(--font-display); 
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--dark);
+      text-align: center;
+    ">Select a Career to Test</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <button class="test-career-btn" data-career='{"id":"programmer","name":"Programmer"}'>
+        <span style="font-size: 20px; display: block; margin-bottom: 4px;">💻</span>
+        Programmer
+      </button>
+      <button class="test-career-btn" data-career='{"id":"police","name":"Police Officer"}'>
+        <span style="font-size: 20px; display: block; margin-bottom: 4px;">👮</span>
+        Police
+      </button>
+      <button class="test-career-btn" data-career='{"id":"teacher","name":"Teacher"}'>
+        <span style="font-size: 20px; display: block; margin-bottom: 4px;">📚</span>
+        Teacher
+      </button>
+      <button class="test-career-btn" data-career='{"id":"farmer","name":"Farmer"}'>
+        <span style="font-size: 20px; display: block; margin-bottom: 4px;">🌾</span>
+        Farmer
+      </button>
+      <button class="test-career-btn" data-career='{"id":"doctor","name":"Doctor"}'>
+        <span style="font-size: 20px; display: block; margin-bottom: 4px;">👨‍⚕️</span>
+        Doctor
+      </button>
+      <button class="test-career-btn" data-career='{"id":"astronaut","name":"Astronaut"}'>
+        <span style="font-size: 20px; display: block; margin-bottom: 4px;">🚀</span>
+        Astronaut
+      </button>
+    </div>
+    <button id="close-test-panel" style="
+      width: 100%;
+      margin-top: 16px;
+      padding: 10px;
+      background: #f0f0f0;
+      border: 2px solid var(--dark);
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      transition: all 0.2s;
+    ">Cancel</button>
+  </div>
+
+  <style>
+    .test-career-btn {
+      padding: 12px 8px;
+      border: 2px solid var(--dark);
+      border-radius: 14px;
+      background: white;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-body);
+      color: var(--dark);
+      box-shadow: 3px 3px 0 var(--dark);
+    }
+    
+    .test-career-btn:hover {
+      background: var(--yellow);
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 var(--dark);
+    }
+    
+    .test-career-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--dark);
+    }
+    
+    #close-test-panel:hover {
+      background: var(--dark);
+      color: white;
+    }
+    
+    #test-mode-btn:hover {
+      background: rgba(255,255,255,0.25) !important;
+    }
+  </style>
+
+  <!-- Scanning hint shown before any toy is detected.
+       Fades out automatically once a target is found. -->
+  <div id="hint">📷 Point at your toy to scan</div>
+
+  <!-- AR SCENE -->
+  <div id="ar-container">
+    <a-scene
+      mindar-image="imageTargetSrc: ../assets/targets.mind;"
+      embedded
+      vr-mode-ui="enabled: false"
+      renderer="colorManagement: true"
+    >
+      <!-- Programmer (targetIndex: 0) -->
+      <a-entity mindar-image-target="targetIndex: 0" id="ar-target-0">
+        <a-image src="../assets/characters/char-programmer.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- Police Officer (targetIndex: 1) -->
+      <a-entity mindar-image-target="targetIndex: 1" id="ar-target-1">
+        <a-image src="../assets/characters/char-police.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- Teacher (targetIndex: 2) -->
+      <a-entity mindar-image-target="targetIndex: 2" id="ar-target-2">
+        <a-image src="../assets/characters/char-teacher.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- Farmer (targetIndex: 3) -->
+      <a-entity mindar-image-target="targetIndex: 3" id="ar-target-3">
+        <a-image src="../assets/characters/char-farmer.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- Doctor (targetIndex: 4) -->
+      <a-entity mindar-image-target="targetIndex: 4" id="ar-target-4">
+        <a-image src="../assets/characters/char-doctor.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- Astronaut (targetIndex: 5) -->
+      <a-entity mindar-image-target="targetIndex: 5" id="ar-target-5">
+        <a-image src="../assets/characters/char-astronaut.png"
+          position="0 0.5 0" width="1" height="1.5"></a-image>
+      </a-entity>
+
+      <!-- The virtual camera — represents the phone camera viewpoint -->
+      <a-camera position="0 0 0"></a-camera>
+    </a-scene>
+  </div>
+
+  <!-- CHAT UI-->
+  <div id="chat-ui" style="display:none;">
+
+    <!-- Character name shown at the top of the chat panel -->
+    <div id="chat-character-name"></div>
+
+    <!-- Scrollable message history (user + assistant bubbles) -->
+    <div id="chat-messages"></div>
+
+    <div id="chat-input-area">
+
+      <!-- Quick-tap preset question buttons populated by chat.js -->
+      <div id="chat-presets"></div>
+
+      <!-- Free-text input row -->
+      <div id="chat-input-row">
+        <input type="text" id="chat-input" placeholder="Ask me anything..." />
+        <button id="chat-send">Send</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="../js/ar.js"></script>
+  <script src="../js/chat.js"></script>
+  <script>
+    // Test mode flag
+    let isTestMode = false;
+    
+    // Test mode button click
+    document.getElementById('test-mode-btn').addEventListener('click', () => {
+      document.getElementById('test-mode-panel').style.display = 'block';
+    });
+    
+    // Close test panel
+    document.getElementById('close-test-panel').addEventListener('click', () => {
+      document.getElementById('test-mode-panel').style.display = 'none';
+    });
+    
+    // Career selection in test mode
+    document.querySelectorAll('.test-career-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const career = JSON.parse(btn.dataset.career);
+        document.getElementById('test-mode-panel').style.display = 'none';
+        
+        // Set test mode flag
+        isTestMode = true;
+        
+        // Trigger AR success logic
+        document.getElementById('hint').style.opacity = '0';
+        document.getElementById('chat-ui').style.display = 'flex';
+        
+        // Dim AR scene slightly to indicate test mode
+        document.getElementById('ar-container').style.opacity = '0.4';
+        
+        // Show test mode indicator in chat header
+        initChat(career);
+        
+        // Add test mode badge to chat name
+        const nameEl = document.getElementById('chat-character-name');
+        nameEl.innerHTML = `💬 Chat with ${career.name} <span style="
+          background: var(--yellow);
+          color: var(--dark);
+          font-size: 11px;
+          padding: 2px 8px;
+          border-radius: 12px;
+          margin-left: 8px;
+        ">TEST MODE</span>`;
+      });
+    });
+    
+    // Called by ar.js when a toy is successfully recognised.
+    // career = { id: "programmer", name: "Programmer" }
+    function onCareerFound(career) {
+      // If in test mode, ignore AR detection
+      if (isTestMode) return;
+      
+      document.getElementById('hint').style.opacity = '0'; // hide scan hint
+      document.getElementById('chat-ui').style.display = 'flex'; // show chat
+      document.getElementById('ar-container').style.opacity = '1'; // ensure full opacity
+      initChat(career); // hand off to teammate's chat module
+    }
+
+    // Called by ar.js when the toy leaves the camera view.
+    function onCareerLost() {
+      // If in test mode, don't hide chat
+      if (isTestMode) return;
+      
+      document.getElementById('hint').style.opacity = '1'; // show scan hint
+      document.getElementById('chat-ui').style.display = 'none'; // hide chat
+    }
+    
+    // Reset test mode when navigating away (optional)
+    window.addEventListener('beforeunload', () => {
+      isTestMode = false;
+    });
+    
+    // Click outside panel to close
+    document.addEventListener('click', (e) => {
+      const panel = document.getElementById('test-mode-panel');
+      const btn = document.getElementById('test-mode-btn');
+      if (panel.style.display === 'block' && 
+          !panel.contains(e.target) && 
+          e.target !== btn) {
+        panel.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
