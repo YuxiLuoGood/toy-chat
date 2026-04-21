@@ -10,6 +10,216 @@
   <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
   <!-- Mind AR: image recognition library, built on top of A-Frame -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+  
+  <style>
+    /* Additional refined styles for test mode - maintaining exact design language */
+    #test-mode-btn {
+      background: rgba(255,255,255,0.15) !important;
+      color: white !important;
+      border: 1px solid rgba(255,255,255,0.3) !important;
+      padding: 6px 12px !important;
+      border-radius: 20px !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      font-family: var(--font-body) !important;
+      transition: background 0.2s !important;
+      text-decoration: none !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+    }
+    
+    #test-mode-btn:hover {
+      background: rgba(255,255,255,0.25) !important;
+    }
+    
+    #test-mode-panel {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      z-index: 300;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+      max-width: 360px;
+      width: 90%;
+      border: 2px solid var(--dark);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: panelPop 0.3s ease-out forwards;
+    }
+    
+    #test-mode-panel.show {
+      display: block;
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+    
+    @keyframes panelPop {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+      }
+    }
+    
+    .test-panel-title {
+      margin-bottom: 20px;
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--dark);
+      text-align: center;
+      letter-spacing: -0.3px;
+    }
+    
+    .test-career-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .test-career-card {
+      padding: 16px 10px;
+      border: 2px solid var(--dark);
+      border-radius: 16px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-family: var(--font-body);
+      color: var(--dark);
+      box-shadow: 4px 4px 0 var(--dark);
+      text-align: center;
+      animation: cardFloat 0.5s ease-out backwards;
+    }
+    
+    .test-career-card:nth-child(1) { animation-delay: 0.00s; }
+    .test-career-card:nth-child(2) { animation-delay: 0.05s; }
+    .test-career-card:nth-child(3) { animation-delay: 0.10s; }
+    .test-career-card:nth-child(4) { animation-delay: 0.15s; }
+    .test-career-card:nth-child(5) { animation-delay: 0.20s; }
+    .test-career-card:nth-child(6) { animation-delay: 0.25s; }
+    
+    @keyframes cardFloat {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .test-career-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--dark);
+      background: #fafafa;
+    }
+    
+    .test-career-card:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--dark);
+    }
+    
+    .test-career-emoji {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 8px;
+      filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.1));
+    }
+    
+    .test-career-name {
+      font-size: 14px;
+      font-weight: 700;
+      font-family: var(--font-body);
+    }
+    
+    .test-panel-close {
+      width: 100%;
+      padding: 12px;
+      background: #f0f0f0;
+      border: 2px solid var(--dark);
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      transition: all 0.2s;
+      box-shadow: 3px 3px 0 var(--dark);
+    }
+    
+    .test-panel-close:hover {
+      background: var(--dark);
+      color: white;
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 var(--dark);
+    }
+    
+    .test-panel-close:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--dark);
+    }
+    
+    /* Test mode overlay effect */
+    #ar-container.test-mode-active {
+      opacity: 0.5;
+      transition: opacity 0.4s ease;
+      filter: grayscale(0.3);
+    }
+    
+    /* Test mode badge in chat header */
+    .test-mode-badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 10px;
+      border: 1.5px solid var(--dark);
+      font-family: var(--font-body);
+      letter-spacing: 0.3px;
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes badgePulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    
+    /* Backdrop overlay */
+    .test-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      z-index: 250;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .test-backdrop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
 </head>
 <body>
 
@@ -22,123 +232,45 @@
     <a href="home.html">← Home</a>
     <img src="../assets/Brighten-logo.png" alt="Brighten" class="logo-img" />
     <div style="display: flex; gap: 8px;">
-      <button id="test-mode-btn" style="
-        background: var(--yellow);
-        color: var(--dark);
-        border: none;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 13px;
-        font-weight: 700;
-        cursor: pointer;
-        font-family: var(--font-body);
-        border: 1.5px solid rgba(255,255,255,0.3);
-        transition: background 0.2s;
-      ">🧪 Test</button>
+      <button id="test-mode-btn">🧪 Test</button>
       <a href="careers.html">Careers</a>
     </div>
   </div>
 
-  <!-- Test mode panel (hidden by default) -->
-  <div id="test-mode-panel" style="
-    position: fixed;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 300;
-    background: rgba(255,255,255,0.97);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    display: none;
-    max-width: 320px;
-    border: 2px solid var(--dark);
-  ">
-    <h3 style="
-      margin-bottom: 16px; 
-      font-family: var(--font-display); 
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--dark);
-      text-align: center;
-    ">Select a Career to Test</h3>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-      <button class="test-career-btn" data-career='{"id":"programmer","name":"Programmer"}'>
-        <span style="font-size: 20px; display: block; margin-bottom: 4px;">💻</span>
-        Programmer
-      </button>
-      <button class="test-career-btn" data-career='{"id":"police","name":"Police Officer"}'>
-        <span style="font-size: 20px; display: block; margin-bottom: 4px;">👮</span>
-        Police
-      </button>
-      <button class="test-career-btn" data-career='{"id":"teacher","name":"Teacher"}'>
-        <span style="font-size: 20px; display: block; margin-bottom: 4px;">📚</span>
-        Teacher
-      </button>
-      <button class="test-career-btn" data-career='{"id":"farmer","name":"Farmer"}'>
-        <span style="font-size: 20px; display: block; margin-bottom: 4px;">🌾</span>
-        Farmer
-      </button>
-      <button class="test-career-btn" data-career='{"id":"doctor","name":"Doctor"}'>
-        <span style="font-size: 20px; display: block; margin-bottom: 4px;">👨‍⚕️</span>
-        Doctor
-      </button>
-      <button class="test-career-btn" data-career='{"id":"astronaut","name":"Astronaut"}'>
-        <span style="font-size: 20px; display: block; margin-bottom: 4px;">🚀</span>
-        Astronaut
-      </button>
-    </div>
-    <button id="close-test-panel" style="
-      width: 100%;
-      margin-top: 16px;
-      padding: 10px;
-      background: #f0f0f0;
-      border: 2px solid var(--dark);
-      border-radius: 20px;
-      cursor: pointer;
-      font-family: var(--font-body);
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--dark);
-      transition: all 0.2s;
-    ">Cancel</button>
-  </div>
+  <!-- Backdrop for test mode panel -->
+  <div class="test-backdrop" id="test-backdrop"></div>
 
-  <style>
-    .test-career-btn {
-      padding: 12px 8px;
-      border: 2px solid var(--dark);
-      border-radius: 14px;
-      background: white;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: var(--font-body);
-      color: var(--dark);
-      box-shadow: 3px 3px 0 var(--dark);
-    }
-    
-    .test-career-btn:hover {
-      background: var(--yellow);
-      transform: translate(-1px, -1px);
-      box-shadow: 4px 4px 0 var(--dark);
-    }
-    
-    .test-career-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 var(--dark);
-    }
-    
-    #close-test-panel:hover {
-      background: var(--dark);
-      color: white;
-    }
-    
-    #test-mode-btn:hover {
-      background: rgba(255,255,255,0.25) !important;
-    }
-  </style>
+  <!-- Test mode panel (hidden by default) -->
+  <div id="test-mode-panel">
+    <div class="test-panel-title">✨ Select a Career to Test</div>
+    <div class="test-career-grid">
+      <div class="test-career-card" data-career='{"id":"programmer","name":"Programmer"}'>
+        <span class="test-career-emoji">💻</span>
+        <span class="test-career-name">Programmer</span>
+      </div>
+      <div class="test-career-card" data-career='{"id":"police","name":"Police Officer"}'>
+        <span class="test-career-emoji">👮</span>
+        <span class="test-career-name">Police</span>
+      </div>
+      <div class="test-career-card" data-career='{"id":"teacher","name":"Teacher"}'>
+        <span class="test-career-emoji">📚</span>
+        <span class="test-career-name">Teacher</span>
+      </div>
+      <div class="test-career-card" data-career='{"id":"farmer","name":"Farmer"}'>
+        <span class="test-career-emoji">🌾</span>
+        <span class="test-career-name">Farmer</span>
+      </div>
+      <div class="test-career-card" data-career='{"id":"doctor","name":"Doctor"}'>
+        <span class="test-career-emoji">👨‍⚕️</span>
+        <span class="test-career-name">Doctor</span>
+      </div>
+      <div class="test-career-card" data-career='{"id":"astronaut","name":"Astronaut"}'>
+        <span class="test-career-emoji">🚀</span>
+        <span class="test-career-name">Astronaut</span>
+      </div>
+    </div>
+    <button class="test-panel-close" id="close-test-panel">Cancel</button>
+  </div>
 
   <!-- Scanning hint shown before any toy is detected.
        Fades out automatically once a target is found. -->
@@ -219,87 +351,130 @@
   <script src="../js/ar.js"></script>
   <script src="../js/chat.js"></script>
   <script>
-    // Test mode flag
-    let isTestMode = false;
-    
-    // Test mode button click
-    document.getElementById('test-mode-btn').addEventListener('click', () => {
-      document.getElementById('test-mode-panel').style.display = 'block';
-    });
-    
-    // Close test panel
-    document.getElementById('close-test-panel').addEventListener('click', () => {
-      document.getElementById('test-mode-panel').style.display = 'none';
-    });
-    
-    // Career selection in test mode
-    document.querySelectorAll('.test-career-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const career = JSON.parse(btn.dataset.career);
-        document.getElementById('test-mode-panel').style.display = 'none';
-        
-        // Set test mode flag
+    (function() {
+      'use strict';
+      
+      // State management
+      let isTestMode = false;
+      let currentCareerName = '';
+      
+      // DOM elements
+      const testBtn = document.getElementById('test-mode-btn');
+      const testPanel = document.getElementById('test-mode-panel');
+      const testBackdrop = document.getElementById('test-backdrop');
+      const closeBtn = document.getElementById('close-test-panel');
+      const arContainer = document.getElementById('ar-container');
+      const hint = document.getElementById('hint');
+      const chatUI = document.getElementById('chat-ui');
+      const chatNameEl = document.getElementById('chat-character-name');
+      
+      // Helper: Show test panel with animation
+      function showTestPanel() {
+        testBackdrop.classList.add('show');
+        testPanel.style.display = 'block';
+        // Force reflow
+        testPanel.offsetHeight;
+        testPanel.classList.add('show');
+      }
+      
+      // Helper: Hide test panel with animation
+      function hideTestPanel() {
+        testBackdrop.classList.remove('show');
+        testPanel.classList.remove('show');
+        setTimeout(() => {
+          if (!testPanel.classList.contains('show')) {
+            testPanel.style.display = 'none';
+          }
+        }, 300);
+      }
+      
+      // Helper: Enter test mode
+      function enterTestMode(career) {
         isTestMode = true;
+        currentCareerName = career.name;
         
-        // Trigger AR success logic
-        document.getElementById('hint').style.opacity = '0';
-        document.getElementById('chat-ui').style.display = 'flex';
+        // Update UI
+        hint.style.opacity = '0';
+        chatUI.style.display = 'flex';
+        arContainer.classList.add('test-mode-active');
         
-        // Dim AR scene slightly to indicate test mode
-        document.getElementById('ar-container').style.opacity = '0.4';
-        
-        // Show test mode indicator in chat header
+        // Initialize chat
         initChat(career);
         
-        // Add test mode badge to chat name
-        const nameEl = document.getElementById('chat-character-name');
-        nameEl.innerHTML = `💬 Chat with ${career.name} <span style="
-          background: var(--yellow);
-          color: var(--dark);
-          font-size: 11px;
-          padding: 2px 8px;
-          border-radius: 12px;
-          margin-left: 8px;
-        ">TEST MODE</span>`;
-      });
-    });
-    
-    // Called by ar.js when a toy is successfully recognised.
-    // career = { id: "programmer", name: "Programmer" }
-    function onCareerFound(career) {
-      // If in test mode, ignore AR detection
-      if (isTestMode) return;
-      
-      document.getElementById('hint').style.opacity = '0'; // hide scan hint
-      document.getElementById('chat-ui').style.display = 'flex'; // show chat
-      document.getElementById('ar-container').style.opacity = '1'; // ensure full opacity
-      initChat(career); // hand off to teammate's chat module
-    }
-
-    // Called by ar.js when the toy leaves the camera view.
-    function onCareerLost() {
-      // If in test mode, don't hide chat
-      if (isTestMode) return;
-      
-      document.getElementById('hint').style.opacity = '1'; // show scan hint
-      document.getElementById('chat-ui').style.display = 'none'; // hide chat
-    }
-    
-    // Reset test mode when navigating away (optional)
-    window.addEventListener('beforeunload', () => {
-      isTestMode = false;
-    });
-    
-    // Click outside panel to close
-    document.addEventListener('click', (e) => {
-      const panel = document.getElementById('test-mode-panel');
-      const btn = document.getElementById('test-mode-btn');
-      if (panel.style.display === 'block' && 
-          !panel.contains(e.target) && 
-          e.target !== btn) {
-        panel.style.display = 'none';
+        // Add test mode badge to chat header
+        const originalContent = chatNameEl.innerHTML;
+        if (!chatNameEl.querySelector('.test-mode-badge')) {
+          const badge = document.createElement('span');
+          badge.className = 'test-mode-badge';
+          badge.textContent = 'TEST';
+          chatNameEl.appendChild(badge);
+        }
       }
-    });
+      
+      // Helper: Exit test mode
+      function exitTestMode() {
+        isTestMode = false;
+        currentCareerName = '';
+        arContainer.classList.remove('test-mode-active');
+        chatUI.style.display = 'none';
+        hint.style.opacity = '1';
+      }
+      
+      // Event: Test button click
+      testBtn.addEventListener('click', showTestPanel);
+      
+      // Event: Close panel
+      closeBtn.addEventListener('click', hideTestPanel);
+      
+      // Event: Click backdrop to close
+      testBackdrop.addEventListener('click', hideTestPanel);
+      
+      // Event: Career card selection
+      document.querySelectorAll('.test-career-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          const career = JSON.parse(card.dataset.career);
+          hideTestPanel();
+          enterTestMode(career);
+        });
+      });
+      
+      // Event: Escape key to close
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && testPanel.classList.contains('show')) {
+          hideTestPanel();
+        }
+      });
+      
+      // Override global AR functions (called by ar.js)
+      window.onCareerFound = function(career) {
+        // If in test mode, ignore AR detection
+        if (isTestMode) return;
+        
+        hint.style.opacity = '0';
+        chatUI.style.display = 'flex';
+        arContainer.classList.remove('test-mode-active');
+        initChat(career);
+      };
+      
+      window.onCareerLost = function() {
+        // If in test mode, don't hide chat
+        if (isTestMode) return;
+        
+        hint.style.opacity = '1';
+        chatUI.style.display = 'none';
+      };
+      
+      // Clean up on page unload
+      window.addEventListener('beforeunload', () => {
+        isTestMode = false;
+      });
+      
+      // Prevent panel close when clicking inside panel
+      testPanel.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+      
+    })();
   </script>
 </body>
 </html>
