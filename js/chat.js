@@ -818,7 +818,7 @@ async function sendMessage(message) {
             body: JSON.stringify({
                 model: DEEPSEEK_CONFIG.model,
                 messages: conversationHistory,
-                max_tokens: 350,  // Increased from 150 to allow more detailed responses
+                max_tokens: 1000,  // Increased from 150 to allow more detailed responses
                 temperature: 0.8,  // Slightly increased for more creative responses
                 stream: true // Enable streaming!
             }),
