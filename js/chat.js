@@ -1,4 +1,5 @@
 
+
 // ============================================
 // CONFIGURATION
 // ============================================
@@ -817,7 +818,7 @@ async function sendMessage(message) {
             body: JSON.stringify({
                 model: DEEPSEEK_CONFIG.model,
                 messages: conversationHistory,
-                max_tokens: 1000,  
+                max_tokens: 350,  
                 temperature: 0.8,  
                 stream: true 
             }),
