@@ -1,4 +1,3 @@
-// chat.js — Advanced Chat Module with Streaming, Visual Effects & Pure Awesomeness ✨
 
 // ============================================
 // CONFIGURATION
@@ -818,9 +817,9 @@ async function sendMessage(message) {
             body: JSON.stringify({
                 model: DEEPSEEK_CONFIG.model,
                 messages: conversationHistory,
-                max_tokens: 1000,  // Increased from 150 to allow more detailed responses
-                temperature: 0.8,  // Slightly increased for more creative responses
-                stream: true // Enable streaming!
+                max_tokens: 1000,  
+                temperature: 0.8,  
+                stream: true 
             }),
             signal: currentAbortController.signal
         });
