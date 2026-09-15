@@ -4,9 +4,9 @@
 
 
 const DEEPSEEK_CONFIG = {
-    apiKey: 'sk-e4859afff68440a38bb1c5c79e87cef8', 
+    apiKey: 'sk-93650c6ddcd44ea0afb4bf35096f9bb4', 
     endpoint: 'https://api.deepseek.com/v1/chat/completions',
-    model: 'deepseek-v4-flash'
+    model: 'deepseek-flash'
 };
 
 
@@ -888,7 +888,8 @@ async function sendMessage(message) {
                 messages: conversationHistory,
                 max_tokens: 1000,  
                 temperature: 0.8,  
-                stream: true 
+                stream: true,
+                reasoning_effort: 'none' 
             }),
             signal: currentAbortController.signal
         });
