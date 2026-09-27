@@ -4,7 +4,7 @@
 
 
 const DEEPSEEK_CONFIG = {
-    apiKey: 'sk-93650c6ddcd44ea0afb4bf35096f9bb4', 
+    apiKey: 'sk-1d9b9a1df6e44327a937f94300989710', 
     endpoint: 'https://api.deepseek.com/v1/chat/completions',
     model: 'deepseek-flash'
 };
